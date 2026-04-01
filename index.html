@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кото-Skills Quiz | monobank</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0E14;
+      --bg-card: #151923;
+      --bg-card-2: #1F2532;
+      --accent: #FF5277;
+      --accent-light: #FF89A3;
+      --accent-blue: #8A2BE2;
+      --accent-dim: rgba(255, 82, 119, 0.13);
+      --gradient: linear-gradient(135deg, #FF5277 0%, #8A2BE2 100%);
+      --text: #FFFFFF;
+      --text-secondary: #9BA9BC;
+      --text-muted: #4B5A6F;
+      --success: #30D158;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255, 82, 119, 0.45);
+      --radius: 20px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11, 14, 20, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px 20px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-mono { font-size: 17px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+    .logo-sep  { color: rgba(255,255,255,0.2); font-weight: 200; font-size: 20px; }
+    .logo-ub   { font-size: 15px; font-weight: 600; color: var(--accent-light); }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 32px 18px 80px; }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .fade-in { animation: fadeUp 0.38s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===================== WELCOME ===================== */
+    .welcome { text-align: center; padding: 48px 0 32px; }
+
+    .card-visual {
+      width: 220px; height: 140px;
+      background: linear-gradient(145deg, #241A2D 0%, #171120 60%, #201321 100%);
+      border-radius: 18px; margin: 0 auto 36px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 18px 22px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7),
+                  0 0 0 1px rgba(255, 82, 119, 0.2),
+                  inset 0 1px 0 rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 82, 119, 0.18);
+      position: relative; overflow: hidden;
+      animation: float 4s ease-in-out infinite;
+    }
+    .card-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255, 82, 119, 0.12) 0%, rgba(138, 43, 226, 0.06) 100%);
+      pointer-events: none;
+    }
+    .card-visual::after {
+      content: ''; position: absolute; top: -40%; right: -20%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(255, 82, 119, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%      { transform: translateY(-8px) rotate(1deg); }
+    }
+    .card-chip {
+      width: 34px; height: 26px;
+      background: linear-gradient(135deg, #FFB86C, #FFD596, #FFB86C);
+      border-radius: 5px;
+    }
+    .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .card-stars { display: flex; gap: 4px; }
+    .card-star {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+    }
+    .card-star:first-child { background: var(--accent); }
+    .card-brand { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
+
+    .welcome h1 {
+      font-size: clamp(26px, 6vw, 38px);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .welcome h1 em {
+      font-style: normal;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 28px;
+    }
+
+    .meta-pills {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; margin-bottom: 36px;
+    }
+    .meta-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--gradient);
+      color: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 16px 40px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: -0.2px;
+      transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 8px 32px rgba(255, 82, 119, 0.38);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255, 82, 119, 0.52);
+    }
+
+    /* ===================== QUIZ ===================== */
+    .progress-wrap {
+      margin-bottom: 32px;
+    }
+    .progress-top {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--text-muted);
+      font-weight: 600; margin-bottom: 8px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 99px;
+      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .question-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+    }
+    .question-num {
+      font-size: 12px; font-weight: 700;
+      color: var(--accent-light);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+    .question-text {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: -0.3px;
+    }
+
+    .scale-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .scale-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .scale-btn {
+      flex: 1;
+      aspect-ratio: 1;
+      max-width: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .scale-btn::after {
+      content: '';
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .scale-btn:hover { border-color: var(--accent-light); }
+    .scale-btn:hover::after { background: var(--accent-light); }
+    .scale-btn.selected {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .scale-btn.selected::after {
+      background: var(--accent-light);
+      box-shadow: 0 0 8px rgba(255, 82, 119, 0.6);
+    }
+    .scale-labels {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--text-muted); font-weight: 500;
+    }
+
+    .quiz-footer {
+      display: flex; justify-content: flex-end;
+    }
+    .btn-next {
+      background: var(--gradient);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px; font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 999px; border: none;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      box-shadow: 0 6px 24px rgba(255, 82, 119, 0.35);
+    }
+    .btn-next:disabled {
+      opacity: 0.35; cursor: not-allowed;
+      box-shadow: none; transform: none;
+    }
+    .btn-next:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(255, 82, 119, 0.5);
+    }
+
+    /* ===================== RESULT ===================== */
+    .result-hero {
+      text-align: center;
+      padding: 48px 0 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .result-emoji {
+      font-size: 72px;
+      line-height: 1;
+      filter: drop-shadow(0 0 24px rgba(255, 82, 119, 0.4));
+    }
+    .result-tag {
+      display: inline-block;
+      background: var(--accent-dim);
+      border: 1px solid rgba(255, 82, 119, 0.3);
+      color: var(--accent-light);
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 5px 14px;
+      border-radius: 999px;
+    }
+
+    .result-main {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .result-title {
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -0.5px; margin-bottom: 12px;
+    }
+    .result-desc {
+      font-size: 15px; color: var(--text-secondary);
+      line-height: 1.65; margin-bottom: 20px;
+    }
+    .skills-row {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    }
+    .skill-chip {
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px; font-weight: 500;
+      padding: 7px 14px; border-radius: 999px;
+    }
+    .skill-chip.primary {
+      background: var(--accent-dim);
+      border-color: rgba(255, 82, 119, 0.35);
+      color: var(--accent-light);
+      font-weight: 600;
+    }
+
+    .axes-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+    .axes-title {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--text-muted); margin-bottom: 20px;
+    }
+    .axis-row { margin-bottom: 14px; }
+    .axis-label-row {
+      display: flex; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .axis-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .axis-pct { font-size: 13px; font-weight: 700; color: var(--accent-light); }
+    .axis-bar-bg {
+      height: 6px; background: rgba(255,255,255,0.06);
+      border-radius: 99px; overflow: hidden;
+    }
+    .axis-bar-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 99px;
+      width: 0; transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .result-actions { text-align: center; padding: 24px 0 0; }
+    .btn-restart {
+      background: transparent;
+      border: 1px solid var(--border-hover);
+      color: var(--accent-light);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      padding: 12px 28px; border-radius: 999px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-restart:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <span class="logo-mono">Котячий Support</span>
+    <span class="logo-sep">|</span>
+    <span class="logo-ub">monobank</span>
+  </div>
+</header>
+
+<div id="screen-welcome" class="screen active">
+  <div class="container">
+    <div class="welcome fade-in">
+      <div class="card-visual">
+        <div class="card-chip"></div>
+        <div class="card-bottom">
+          <div class="card-stars">
+            <div class="card-star"></div>
+            <div class="card-star"></div>
+            <div class="card-star"></div>
+          </div>
+          <div class="card-brand">М'ЯУ-SKILLS</div>
+        </div>
+      </div>
+      <h1>Який ти котик <em>у підтримці?</em></h1>
+      <p>10 життєвих ситуацій на лінії — і ти дізнаєшся, яка суперсила робить тебе топовим котаном 🐾</p>
+      <div class="meta-pills">
+        <span class="meta-pill">⏱️ 2 хвилини</span>
+        <span class="meta-pill">🎧 10 тікетів</span>
+        <span class="meta-pill">🏆 Твоя кото-роль</span>
+      </div>
+      <button class="btn-primary" onclick="startQuiz()">Розпочати тест →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-quiz" class="screen">
+  <div class="container">
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span id="q-counter">Питання 1 з 10</span>
+        <span id="q-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="question-card">
+      <div class="question-num" id="q-num">01 / 10</div>
+      <div class="question-text" id="q-text"></div>
+    </div>
+    <div class="scale-section">
+      <div class="scale-buttons" id="scale-buttons"></div>
+      <div class="scale-labels">
+        <span>Зовсім ні</span>
+        <span>Няв-трально</span>
+        <span>О, так!</span>
+      </div>
+    </div>
+    <div class="quiz-footer">
+      <button class="btn-next" id="btn-next" disabled onclick="nextQuestion()">Далі →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-result" class="screen">
+  <div class="container"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+  { text: "Якщо клієнт кричить і не пояснює суть проблеми, я гублюся, замість того щоб м'яко вивести розмову в конструктив.", axes: [-0.5, 0, 0, -1, 0], reversed: true },
+  { text: "Мені комфортніше працювати виключно за суворим скриптом, ніж муркотіти з клієнтом, імпровізуючи по ситуації.", axes: [-1, 0, -0.5, 0, 0], reversed: true },
+  { text: "Коли бачу, що інший котик неправильно оформив чат, я краще промовчу, щоб не настовбурчувати шерсть.", axes: [0, -1, 0, 0, -0.5], reversed: true },
+  { text: "Перша зміна на лінії або новий апдейт застосунку — це стрес, але я швидко відрощую вібріси і адаптуюсь.", axes: [0, 0, 1, 0, 0], reversed: false },
+  { text: "Якщо я не встигаю закрити складний запит, я чесно нявкну про це тімліду заздалегідь, навіть якщо це незручно.", axes: [0, 0.5, 0, 1, 0], reversed: false },
+  { text: "Можу взяти дзвінок від складного клієнта, навіть якщо не знаю всієї передісторії — розберуся по ходу.", axes: [1, 0, 0.5, 0, 0], reversed: false },
+  { text: "Мені важливо отримувати фідбек за свої діалоги одразу (порадою або погладжуванням), а не чекати оцінки якості в кінці місяця.", axes: [0, 0.5, 0, 0, 1], reversed: false },
+  { text: "Відверто сказати тімліду про проблеми зі скриптами важливіше, ніж зберігати ідеальну тишу в нашому лотку... ой, чаті.", axes: [0.5, 1, 0, 0, 0.5], reversed: false },
+  { text: "Нові правила, продукти та процеси — це норм, я легко зміню свої котячі звички.", axes: [0, 0, 1, 0.5, 0], reversed: false },
+  { text: "Я рідко прошу допомоги у старших котів — спочатку намагаюсь вигризти рішення самостійно.", axes: [0.5, -0.5, 0, 0.5, -0.5], reversed: false }
+];
+
+const PROFILES = [
+  {
+    name: "Тихий Ватажок Прайду",
+    icon: "🦁",
+    desc: "Ти ведеш інших котанів не голосним нявканням, а прикладом. Берешся за найскладніші тікети без зайвих слів. Твоя суперсила — внутрішня впевненість. Інші котики інстинктивно тобі довіряють.",
+    skills: ["Авторитет без крику", "Надійність", "Холодний розум"],
+    pattern: { i: 2, c: 1, a: 1, r: 2, f: 1 }
+  },
+  {
+    name: "Командний Котик",
+    icon: "🐾",
+    desc: "Тобі важливо, щоб прайд був єдиним механізмом. Ти легко знаходиш спільну мову з різними котанами і завжди готовий поділитися смаколиком (або підказкою в чаті). Конфлікти перетворюєш на дружнє муркотіння.",
+    skills: ["Командна гра", "Емпатія", "М'які лапки (Дипломатія)"],
+    pattern: { i: 1, c: 2, a: 1, r: 1, f: 1 }
+  },
+  {
+    name: "Кіт-Архітектор Систем",
+    icon: "⚙️",
+    desc: "Ти бачиш систему цілком. Перш ніж відповідати клієнту, ти аналізуєш процеси і знаходиш вузькі місця. Хаотичні діалоги ти перетворюєш на структуру. Твої рішення логічні, як ідеально вилизана шерсть.",
+    skills: ["Аналітичний розум", "Структурованість", "Оптимізація"],
+    pattern: { i: 1, c: 0, a: 1, r: 2, f: 1 }
+  },
+  {
+    name: "Гнучкий Акробат",
+    icon: "🐈",
+    desc: "Зміни для тебе — не стрес, а нова коробка для ігор. Ти швидко освоюєшся з новими продуктами банку і ніколи не падаєш спиною донизу. Перші дні після релізу фічі — твоя улюблена фаза.",
+    skills: ["Адаптивність", "Швидке навчання", "Дев'ять життів (Стресостійкість)"],
+    pattern: { i: 1, c: 1, a: 3, r: 1, f: 0 }
+  },
+  {
+    name: "Охоронець Дедлайнів",
+    icon: "🛡️",
+    desc: "Якщо ти взяв тікет — він буде закритий. Ти не шукаєш відмовок. Тімлід і прайд знають: на твої лапки можна покластись. Твоя надійність — це щира відповідальність за спокій клієнта.",
+    skills: ["Відповідальність", "Дисципліна", "Безвідмовність"],
+    pattern: { i: 0, c: 1, a: 1, r: 3, f: 1 }
+  },
+  {
+    name: "Голосистий Комунікатор",
+    icon: "💬",
+    desc: "Ти віриш, що більшість проблем вирішується, якщо просто добре поговорити. Не боїшся складних клієнтів і вмієш дати фідбек колезі так, щоб той не випустив кігті. Люди (і коти) люблять з тобою працювати.",
+    skills: ["Комунікабельність", "Асертивність", "Вміння слухати"],
+    pattern: { i: 0, c: 3, a: 1, r: 1, f: 1 }
+  },
+  {
+    name: "Допитливий Слідопит",
+    icon: "🔍",
+    desc: "Ти не чекаєш, поки старший кіт принесе готове рішення. Сам риєшся в базі знань, тестуєш застосунок і пропонуєш ідеї. Твоя цікавість — як у кота, що побачив лазерну указку. Це твоя конкурентна перевага.",
+    skills: ["Ініціативність", "Допитливість", "Самоорганізація"],
+    pattern: { i: 3, c: 1, a: 1, r: 1, f: 0 }
+  },
+  {
+    name: "Ловець Фідбеку",
+    icon: "🎯",
+    desc: "Ти знаєш, що не станеш левом без чесної критики. Просиш поради, даєш їх іншим і не боїшся визнати, якщо десь 'наклав мимо лотка'. Твій професійний розвиток швидкий і цілеспрямований.",
+    skills: ["Відкритість", "Саморефлексія", "Прагнення росту"],
+    pattern: { i: 0, c: 1, a: 0, r: 1, f: 3 }
+  },
+  {
+    name: "Кіт-Балансер",
+    icon: "⚖️",
+    desc: "Ти рідко впадаєш у крайнощі. Знаєш, коли треба побігати по стелі (проявити ініціативу), а коли — просто полежати на сонечку і підтримати розмову. Твоя рівновага — це мудре управління енергією.",
+    skills: ["Емоційний інтелект", "Гнучкість", "Самоконтроль"],
+    pattern: { i: 1, c: 1, a: 1, r: 1, f: 1 }
+  },
+  {
+    name: "Кіт-Одинак",
+    icon: "🐆",
+    desc: "Ти глибокий, самостійний мислитель. Тобі краще думається наодинці з базою даних, і твої відповіді клієнтам бездоганні. Командний чат для тебе — інструмент, а не місце для мемів. Ти цінуєш якість.",
+    skills: ["Стратегія", "Незалежність", "Глибина аналізу"],
+    pattern: { i: 2, c: 0, a: 1, r: 2, f: 0 }
+  },
+  {
+    name: "Муркотливий Емпат",
+    icon: "❤️",
+    desc: "Ти ідеально відчуваєш настрій клієнта і прайду. Підтримуєш колег після важких дзвінків і завжди знаходиш потрібне 'м'яу'. Твоя емпатія заспокоює найрозлюченіших клієнтів — це рідкісний дар.",
+    skills: ["Емпатія", "Підтримка", "Психологічна безпека"],
+    pattern: { i: 0, c: 2, a: 1, r: 0, f: 2 }
+  },
+  {
+    name: "Мисливець за Результатом",
+    icon: "📈",
+    desc: "Тебе цікавить спіймана миша (вирішена проблема), а не процес полювання. Швидко відсікаєш зайве і фокусуєшся на суті. Не любиш зайвих мітингів. Твій KPI завжди зелений, як котяча м'ята.",
+    skills: ["Орієнтація на результат", "Фокус", "Ефективність"],
+    pattern: { i: 2, c: 0, a: 0, r: 2, f: 0 }
+  },
+  {
+    name: "Кіт-Дипломат",
+    icon: "🕊️",
+    desc: "Ти вмієш заспокоїти двох котів, що шиплять один на одного. Конфлікти з клієнтами розв'язуєш граціозно, шукаєш win-win. Здатність знаходити компроміс — твоя головна фішка.",
+    skills: ["Переговори", "Робота з негативом", "Дипломатичність"],
+    pattern: { i: 0, c: 2, a: 2, r: 0, f: 1 }
+  },
+  {
+    name: "Експерт з Внутрішнім Моторчиком",
+    icon: "🚀",
+    desc: "Тобі не потрібен тімлід з лазеркою, щоб працювати круто. Ти сам ставиш собі планку, і вона вища за стандарти. Постійно читаєш нові інструкції та прагнеш бути найкращим на лінії.",
+    skills: ["Внутрішня мотивація", "Самодисципліна", "Експертність"],
+    pattern: { i: 2, c: 0, a: 0, r: 3, f: 0 }
+  },
+  {
+    name: "Гнучкий Стратег",
+    icon: "🌊",
+    desc: "Маєш план розмови, але легко змінюєш тактику, якщо клієнт видає щось непередбачуване. Не тримаєшся за стандартний скрипт, якщо бачиш кращий шлях до вирішення.",
+    skills: ["Стратегічне мислення", "Адаптивність", "Рішучість"],
+    pattern: { i: 2, c: 1, a: 2, r: 1, f: 0 }
+  },
+  {
+    name: "Кошеня, Що Зростає",
+    icon: "🌱",
+    desc: "Ти знаєш, що ще не став головним тигром — і це твоя сила. Відкрито питаєш про незрозуміле і швидко вчишся на помилках. Твій потенціал до розвитку просто величезний.",
+    skills: ["Жага до знань", "Смиренність", "Потенціал"],
+    pattern: { i: 1, c: 1, a: 2, r: 1, f: 2 }
+  },
+  {
+    name: "Душа Прайду",
+    icon: "🕸️",
+    desc: "Ти швидко обростаєш зв'язками. Вже в перший тиждень знаєш, до якого старшого кота йти з яким питанням. Твій нетворкінг — реальний інструмент для швидкого вирішення тікетів.",
+    skills: ["Нетворкінг", "Соціальний інтелект", "Комунікабельність"],
+    pattern: { i: 1, c: 3, a: 1, r: 0, f: 1 }
+  },
+  {
+    name: "Чесний Критик",
+    icon: "🔔",
+    desc: "Ти не боїшся нявкнути правду. Помічаєш баги в скриптах чи процесах і прямо кажеш про них — без агресії, але чітко. Ти захищаєш якість підтримки там, де інші мовчать.",
+    skills: ["Асертивність", "Прямолінійність", "Конструктив"],
+    pattern: { i: 1, c: 2, a: 0, r: 1, f: 2 }
+  },
+  {
+    name: "Процесний Творець",
+    icon: "🔧",
+    desc: "Ти віриш, що будь-який процес можна зробити зручнішим. Постійно шукаєш способи оптимізувати роботу з базою або чатами. Не ламаєш старе, а акуратно еволюціонуєш його.",
+    skills: ["Оптимізація", "Ініціативність", "Системність"],
+    pattern: { i: 2, c: 1, a: 1, r: 1, f: 1 }
+  },
+  {
+    name: "Кіт-Скеля",
+    icon: "🏔️",
+    desc: "Ти той, на кого спираються під час 'шторму' на лінії. Не панікуєш під тиском сотні дзвінків. Твій дзен заспокоює і клієнтів, і колег поруч. Ти — якір прайду.",
+    skills: ["Стресостійкість", "Надійність", "Спокій"],
+    pattern: { i: 0, c: 1, a: 2, r: 2, f: 1 }
+  },
+  {
+    name: "Еталонний Котан",
+    icon: "💎",
+    desc: "Твій рівень сервісу однаковий — чи слухає тебе контроль якості, чи ні. Твоя репутація кристально чиста. Це викликає максимальну довіру з боку керівництва.",
+    skills: ["Цілісність", "Відповідальність", "Довіра"],
+    pattern: { i: 0, c: 0, a: 0, r: 3, f: 1 }
+  },
+  {
+    name: "Творчий Бешкетник",
+    icon: "💡",
+    desc: "Ти бачиш нестандартні виходи зі складних ситуацій клієнтів. Генеруєш ідеї навіть тоді, коли не просять. Твоя енергія виводить якість підтримки за рамки звичайних скриптів.",
+    skills: ["Креативність", "Ініціатива", "Інноваційність"],
+    pattern: { i: 3, c: 1, a: 1, r: 0, f: 1 }
+  },
+  {
+    name: "Кіт-Перфекціоніст",
+    icon: "🔬",
+    desc: "Жодна дрібниця не прослизне повз твої очі. Кожна кома в чаті, кожна деталь тарифу перевірена двічі. Команда знає: після тебе тікет перепровіряти не треба.",
+    skills: ["Увага до деталей", "Якість", "Ретельність"],
+    pattern: { i: 0, c: 0, a: 0, r: 2, f: 2 }
+  },
+  {
+    name: "Котячий Фасилітатор",
+    icon: "🎤",
+    desc: "Ти вмієш модерувати хаос. На зборах чи в групових чатах ти розкладаєш все по поличках, даючи висловитись кожному. Після твого втручання з'являються чіткі інструкції.",
+    skills: ["Фасилітація", "Структурування", "Інклюзивність"],
+    pattern: { i: 1, c: 2, a: 1, r: 0, f: 2 }
+  },
+  {
+    name: "Кіт-Дослідник",
+    icon: "🧩",
+    desc: "Ти гуглиш і шукаєш в базі до останнього. Звертаєшся з питанням тільки коли перерив усе. Твої запитання глибокі і по суті. Ніколи не питаєш одне й те саме двічі.",
+    skills: ["Самостійність", "Аналітика", "Критичне мислення"],
+    pattern: { i: 2, c: 0, a: 1, r: 1, f: 1 }
+  },
+  {
+    name: "Генератор Мурчання",
+    icon: "🌟",
+    desc: "Твоя енергія заразлива. Коли настрій у прайді падає через важку зміну, ти — той, хто приносить позитив і нагадує, чому ви круті. З тобою просто приємно працювати поруч.",
+    skills: ["Натхнення", "Позитив", "Мотивація"],
+    pattern: { i: 1, c: 2, a: 1, r: 1, f: 0 }
+  },
+  {
+    name: "Тактичний Мишолов",
+    icon: "🎖️",
+    desc: "Ти чудово розумієш загальну мету компанії і розбиваєш її на щоденні дії. Плануєш свій час на лінії та перерви так, щоб максимізувати ефективність. Справжній ніндзя підтримки.",
+    skills: ["Планування", "Майстерність виконання", "Увага до деталей"],
+    pattern: { i: 1, c: 0, a: 1, r: 2, f: 1 }
+  },
+  {
+    name: "Відважний Новатор",
+    icon: "⚗️",
+    desc: "Ти не боїшся ламати застарілі правила. Пропонуєш сміливі зміни у спілкуванні з клієнтами і відстоюєш їх. Іноді це ризик, але саме ти рухаєш прайд у майбутнє.",
+    skills: ["Сміливість", "Інноваційність", "Стійкість"],
+    pattern: { i: 3, c: 0, a: 2, r: 0, f: 0 }
+  },
+  {
+    name: "Кіт-Ментор",
+    icon: "🦉",
+    desc: "Ти ловиш кайф, навчаючи новеньких кошенят. Терпляче пояснюєш, як працює адмінка, і щиро радієш їхнім успіхам. Твій досвід — це скарбниця всього відділу.",
+    skills: ["Наставництво", "Передача знань", "Підтримка"],
+    pattern: { i: 1, c: 2, a: 0, r: 1, f: 3 }
+  },
+  {
+    name: "Незалежний Тигр",
+    icon: "🐯",
+    desc: "Маєш власну думку і не боїшся сказати її керівництву. Тобі важливо зробити правильно, а не так, як простіше. Але якщо тебе переконати логікою — ти легко визнаєш правоту іншого.",
+    skills: ["Критичне мислення", "Незалежність", "Впевненість"],
+    pattern: { i: 2, c: 1, a: 0, r: 2, f: 0 }
+  }
+];
+
+const AXIS_NAMES = ["Ініціативність", "Мур-комунікація", "Гнучкість (Адаптивність)", "Відповідальність", "Робота з фідбеком"];
+
+let currentQ = 0;
+let answers = [];
+let selectedVal = null;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() {
+  currentQ = 0;
+  answers = [];
+  selectedVal = null;
+  renderQuestion();
+  showScreen('quiz');
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+  const pct = Math.round((currentQ / total) * 100);
+
+  document.getElementById('q-counter').textContent = `Запитання ${currentQ + 1} з ${total}`;
+  document.getElementById('q-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-num').textContent = (currentQ + 1) + ' / ' + total;
+  document.getElementById('q-text').textContent = q.text;
+
+  selectedVal = null;
+  document.getElementById('btn-next').disabled = true;
+
+  const container = document.getElementById('scale-buttons');
+  container.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'scale-btn';
+    btn.dataset.val = i;
+    btn.addEventListener('click', () => selectVal(i));
+    container.appendChild(btn);
+  }
+}
+
+function selectVal(val) {
+  selectedVal = val;
+  document.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', +btn.dataset.val === val);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (selectedVal === null) return;
+  answers.push(selectedVal);
+  currentQ++;
+  if (currentQ < QUESTIONS.length) {
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  const axisScores = [0, 0, 0, 0, 0];
+  for (let q = 0; q < QUESTIONS.length; q++) {
+    const question = QUESTIONS[q];
+    const raw = answers[q];
+    const effectiveVal = question.reversed ? (6 - raw) : raw;
+    const norm = effectiveVal - 3;
+    for (let a = 0; a < 5; a++) {
+      axisScores[a] += norm * question.axes[a];
+    }
+  }
+
+  // Обчислення максимуму для кожної осі
+  const axisMax = [0, 0, 0, 0, 0];
+  for (let a = 0; a < 5; a++) {
+    for (let q = 0; q < QUESTIONS.length; q++) {
+      axisMax[a] += Math.abs(QUESTIONS[q].axes[a]) * 3;
+    }
+  }
+
+  const normalized = axisScores.map((s, i) => {
+    if (axisMax[i] === 0) return 50;
+    return Math.round(((s + axisMax[i]) / (2 * axisMax[i])) * 100);
+  });
+
+  // Пошук профілю: мінімальна відстань
+  let bestProfile = PROFILES[0];
+  let bestDist = Infinity;
+
+  for (const p of PROFILES) {
+    const pi = p.pattern.i;
+    const pc = p.pattern.c;
+    const pa = p.pattern.a;
+    const pr = p.pattern.r;
+    const pf = p.pattern.f;
+
+    // Масштабування патерну (0-3) до 0-100
+    const pNorm = [pi, pc, pa, pr, pf].map(v => (v / 3) * 100);
+    const dist = normalized.reduce((sum, v, i) => sum + Math.pow(v - pNorm[i], 2), 0);
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestProfile = p;
+    }
+  }
+
+  const axesBarsHtml = normalized.map((pct, i) => `
+    <div class="axis-row">
+      <div class="axis-label-row">
+        <span class="axis-label">${AXIS_NAMES[i]}</span>
+        <span class="axis-pct">${pct}%</span>
+      </div>
+      <div class="axis-bar-bg">
+        <div class="axis-bar-fill" data-width="${pct}%"></div>
+      </div>
+    </div>
+  `).join('');
+
+  const profile = bestProfile;
+  const html = `
+    <div class="result-hero fade-in">
+      <span class="result-emoji">${profile.icon}</span>
+      <span class="result-tag">Твоя кото-роль</span>
+    </div>
+    <div class="result-main fade-in">
+      <h2 class="result-title">${profile.name}</h2>
+      <p class="result-desc">${profile.desc}</p>
+      <div class="skills-row">
+        ${profile.skills.map((s, i) => `<span class="skill-chip${i === 0 ? ' primary' : ''}">${s}</span>`).join('')}
+      </div>
+    </div>
+    <div class="axes-card fade-in">
+      <div class="axes-title">Твій профіль по осях</div>
+      ${axesBarsHtml}
+    </div>
+    <div class="result-actions fade-in">
+      <button class="btn-restart" onclick="restartQuiz()">↺ Пройти ще раз</button>
+    </div>`;
+
+  document.getElementById('screen-result').querySelector('.container').innerHTML = html;
+  showScreen('result');
+  setTimeout(() => {
+    document.querySelectorAll('.axis-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width;
+    });
+  }, 100);
+}
+
+function restartQuiz() {
+  startQuiz();
+}
+</script>
+</body>
+</html>

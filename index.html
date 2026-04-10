@@ -3,384 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Кото-Skills Quiz | monobank</title>
+  <title>Support | monobank</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #0B0E14;
-      --bg-card: #151923;
-      --bg-card-2: #1F2532;
-      --accent: #FF5277;
-      --accent-light: #FF89A3;
-      --accent-blue: #8A2BE2;
-      --accent-dim: rgba(255, 82, 119, 0.13);
-      --gradient: linear-gradient(135deg, #FF5277 0%, #8A2BE2 100%);
-      --text: #FFFFFF;
-      --text-secondary: #9BA9BC;
-      --text-muted: #4B5A6F;
-      --success: #30D158;
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(255, 82, 119, 0.45);
-      --radius: 20px;
-      --radius-sm: 14px;
+      /* Палітра Аури */
+      --color-bg: #FDF3F5;
+      --color-blob-1: #FFD1E8; /* Рожевий */
+      --color-blob-2: #B5D1E2; /* Блакитний */
+      --color-blob-3: #E5E0FF; /* Бузковий */
+      
+      --accent: #FF335F;
+      --accent-dim: rgba(255, 51, 95, 0.1);
+      
+      --text: #1C1C1E;
+      --text-secondary: #3A3A3C;
+      --text-muted: #8E8E93;
+      
+      --glass-bg: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.8);
+      --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+      
+      --radius: 28px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    
     body {
-      background: var(--bg);
+      background-color: var(--color-bg);
       color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      position: relative;
     }
 
-    /* HEADER */
+    /* АНІМОВАНА АУРА НА ФОНІ */
+    .bg-aurora {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden;
+      pointer-events: none;
+    }
+    .blob {
+      position: absolute; border-radius: 50%; filter: blur(90px);
+      animation: float-blob 12s infinite alternate ease-in-out;
+      opacity: 0.8;
+    }
+    .blob-1 { background: var(--color-blob-1); width: 60vw; height: 60vw; top: -10%; left: -10%; }
+    .blob-2 { background: var(--color-blob-2); width: 70vw; height: 70vw; bottom: -20%; right: -10%; animation-delay: -3s; }
+    .blob-3 { background: var(--color-blob-3); width: 50vw; height: 50vw; top: 30%; left: 30%; animation-delay: -6s; }
+
+    @keyframes float-blob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(10%, 10%) scale(1.1); }
+    }
+
+    /* ХЕДЕР */
     .header {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(11, 14, 20, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--glass-border);
       display: flex; align-items: center; justify-content: center;
       padding: 16px 20px;
     }
-    .logo { display: flex; align-items: center; gap: 10px; }
-    .logo-mono { font-size: 17px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
-    .logo-sep  { color: rgba(255,255,255,0.2); font-weight: 200; font-size: 20px; }
-    .logo-ub   { font-size: 15px; font-weight: 600; color: var(--accent-light); }
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo-mono { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+    .logo-sep  { color: var(--text-muted); font-weight: 300; font-size: 18px; }
+    .logo-ub   { font-size: 16px; font-weight: 700; color: var(--text-secondary); }
 
     .container { max-width: 660px; margin: 0 auto; padding: 32px 18px 80px; }
 
-    .screen { display: none; }
-    .screen.active { display: block; }
+    /* ЕФЕКТ СКЛА ДЛЯ КАРТОК */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: var(--glass-shadow);
+    }
 
-    .fade-in { animation: fadeUp 0.38s ease both; }
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeUp 0.4s ease both; }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
+      from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===================== WELCOME ===================== */
-    .welcome { text-align: center; padding: 48px 0 32px; }
-
-    .card-visual {
-      width: 220px; height: 140px;
-      background: linear-gradient(145deg, #241A2D 0%, #171120 60%, #201321 100%);
-      border-radius: 18px; margin: 0 auto 36px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      padding: 18px 22px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.7),
-                  0 0 0 1px rgba(255, 82, 119, 0.2),
-                  inset 0 1px 0 rgba(255,255,255,0.08);
-      border: 1px solid rgba(255, 82, 119, 0.18);
-      position: relative; overflow: hidden;
-      animation: float 4s ease-in-out infinite;
+    /* === WELCOME === */
+    .welcome { text-align: center; padding: 40px 0 20px; }
+    
+    .hero-icon-wrap {
+      width: 120px; height: 120px; margin: 0 auto 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      box-shadow: 0 16px 40px rgba(255, 51, 95, 0.15), inset 0 4px 12px rgba(255,255,255,0.8);
+      color: var(--accent); /* Колір іконки */
+      animation: bounce-soft 4s ease-in-out infinite;
+      overflow: hidden; /* Щоб картинка була круглою */
     }
-    .card-visual::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255, 82, 119, 0.12) 0%, rgba(138, 43, 226, 0.06) 100%);
-      pointer-events: none;
+    .hero-icon-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
     }
-    .card-visual::after {
-      content: ''; position: absolute; top: -40%; right: -20%;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(255, 82, 119, 0.18) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    @keyframes float {
-      0%,100% { transform: translateY(0) rotate(-1deg); }
-      50%      { transform: translateY(-8px) rotate(1deg); }
-    }
-    .card-chip {
-      width: 34px; height: 26px;
-      background: linear-gradient(135deg, #FFB86C, #FFD596, #FFB86C);
-      border-radius: 5px;
-    }
-    .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-    .card-stars { display: flex; gap: 4px; }
-    .card-star {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(255,255,255,0.35);
-    }
-    .card-star:first-child { background: var(--accent); }
-    .card-brand { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
-
-    .welcome h1 {
-      font-size: clamp(26px, 6vw, 38px);
-      font-weight: 800;
-      line-height: 1.18;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-    .welcome h1 em {
-      font-style: normal;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .welcome p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      max-width: 480px;
-      margin: 0 auto 28px;
+    
+    @keyframes bounce-soft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
-    .meta-pills {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      justify-content: center; margin-bottom: 36px;
-    }
-    .meta-pill {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 16px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
+    .welcome h1 { font-size: clamp(28px, 6vw, 42px); font-weight: 900; line-height: 1.15; letter-spacing: -1px; margin-bottom: 16px; }
+    .welcome h1 em { font-style: normal; color: var(--accent); }
+    .welcome p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; max-width: 480px; margin: 0 auto 32px; }
 
     .btn-primary {
-      display: inline-block;
-      background: var(--gradient);
-      color: #fff;
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 700;
-      padding: 16px 40px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      letter-spacing: -0.2px;
-      transition: transform 0.18s, box-shadow 0.18s;
-      box-shadow: 0 8px 32px rgba(255, 82, 119, 0.38);
+      display: inline-block; background: var(--text); color: #fff;
+      font-family: inherit; font-size: 16px; font-weight: 700;
+      padding: 18px 44px; border-radius: 999px; border: none; cursor: pointer;
+      transition: all 0.2s; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(255, 82, 119, 0.52);
-    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2); }
+    
+    .btn-primary.accent { background: var(--accent); box-shadow: 0 8px 24px rgba(255, 51, 95, 0.25); }
+    .btn-primary.accent:hover { box-shadow: 0 12px 32px rgba(255, 51, 95, 0.35); }
 
-    /* ===================== QUIZ ===================== */
-    .progress-wrap {
-      margin-bottom: 32px;
-    }
-    .progress-top {
-      display: flex; justify-content: space-between;
-      font-size: 12px; color: var(--text-muted);
-      font-weight: 600; margin-bottom: 8px;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .progress-bar {
-      height: 4px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--gradient);
-      border-radius: 99px;
-      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
-    }
+    /* === QUIZ === */
+    .progress-top { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .progress-bar { height: 6px; background: rgba(0,0,0,0.05); border-radius: 99px; overflow: hidden; margin-bottom: 32px; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
 
-    .question-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      margin-bottom: 24px;
-    }
-    .question-num {
-      font-size: 12px; font-weight: 700;
-      color: var(--accent-light);
-      text-transform: uppercase; letter-spacing: 0.8px;
-      margin-bottom: 14px;
-    }
-    .question-text {
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 1.5;
-      letter-spacing: -0.3px;
-    }
+    .question-card { padding: 36px 32px; margin-bottom: 24px; }
+    .question-num { font-size: 14px; font-weight: 800; color: var(--accent); margin-bottom: 16px; letter-spacing: 0.5px; }
+    .question-text { font-size: 20px; font-weight: 600; line-height: 1.5; color: var(--text); letter-spacing: -0.3px; }
 
-    .scale-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 28px;
-      margin-bottom: 20px;
+    /* ІНТЕРАКТИВНИЙ СЕГМЕНТОВАНИЙ КОНТРОЛ */
+    .interactive-scale { padding: 28px 32px; margin-bottom: 24px; }
+    .scale-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
+    
+    .scale-track {
+      display: flex; position: relative; gap: 4px;
+      background: rgba(0,0,0,0.03); padding: 6px; border-radius: 99px;
+      border: 1px solid rgba(0,0,0,0.02);
     }
-    .scale-buttons {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
+    .scale-highlight {
+      position: absolute; top: 6px; bottom: 6px; left: 6px; width: 0;
+      background: #FFFFFF; border-radius: 99px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0; pointer-events: none; z-index: 1;
     }
-    .scale-btn {
-      flex: 1;
-      aspect-ratio: 1;
-      max-width: 52px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      background: transparent;
-      cursor: pointer;
-      transition: all 0.15s;
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
+    .scale-option {
+      flex: 1; height: 44px; position: relative; z-index: 2;
+      border: none; background: transparent; border-radius: 99px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
     }
-    .scale-btn::after {
-      content: '';
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      transition: all 0.15s;
+    .scale-option::after {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(0,0,0,0.15); transition: all 0.2s;
     }
-    .scale-btn:hover { border-color: var(--accent-light); }
-    .scale-btn:hover::after { background: var(--accent-light); }
-    .scale-btn.selected {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-    }
-    .scale-btn.selected::after {
-      background: var(--accent-light);
-      box-shadow: 0 0 8px rgba(255, 82, 119, 0.6);
-    }
-    .scale-labels {
-      display: flex; justify-content: space-between;
-      font-size: 12px; color: var(--text-muted); font-weight: 500;
-    }
+    .scale-option:hover::after { background: var(--text-muted); transform: scale(1.5); }
+    .scale-option.active::after { background: var(--accent); transform: scale(1.5); }
 
-    .quiz-footer {
-      display: flex; justify-content: flex-end;
-    }
+    .quiz-footer { display: flex; justify-content: flex-end; }
     .btn-next {
-      background: var(--gradient);
-      color: #fff;
-      font-family: inherit;
-      font-size: 15px; font-weight: 700;
-      padding: 14px 32px;
-      border-radius: 999px; border: none;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-      box-shadow: 0 6px 24px rgba(255, 82, 119, 0.35);
+      background: var(--text); color: #fff; font-family: inherit; font-size: 15px; font-weight: 700;
+      padding: 16px 36px; border-radius: 999px; border: none; cursor: pointer;
+      transition: all 0.2s;
     }
-    .btn-next:disabled {
-      opacity: 0.35; cursor: not-allowed;
-      box-shadow: none; transform: none;
-    }
-    .btn-next:not(:disabled):hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 32px rgba(255, 82, 119, 0.5);
-    }
+    .btn-next:disabled { background: rgba(0,0,0,0.05); color: var(--text-muted); cursor: not-allowed; }
 
-    /* ===================== RESULT ===================== */
-    .result-hero {
-      text-align: center;
-      padding: 48px 0 24px;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-    }
-    .result-emoji {
-      font-size: 72px;
-      line-height: 1;
-      filter: drop-shadow(0 0 24px rgba(255, 82, 119, 0.4));
-    }
-    .result-tag {
-      display: inline-block;
-      background: var(--accent-dim);
-      border: 1px solid rgba(255, 82, 119, 0.3);
-      color: var(--accent-light);
-      font-size: 12px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
-      padding: 5px 14px;
-      border-radius: 999px;
-    }
+    /* === RESULT === */
+    .result-hero { text-align: center; padding: 24px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .result-tag { display: inline-block; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--accent); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 8px 16px; border-radius: 999px; }
 
-    .result-main {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .result-title {
-      font-size: 28px; font-weight: 800;
-      letter-spacing: -0.5px; margin-bottom: 12px;
-    }
-    .result-desc {
-      font-size: 15px; color: var(--text-secondary);
-      line-height: 1.65; margin-bottom: 20px;
-    }
-    .skills-row {
-      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-    }
-    .skill-chip {
-      background: var(--bg-card-2);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-size: 13px; font-weight: 500;
-      padding: 7px 14px; border-radius: 999px;
-    }
-    .skill-chip.primary {
-      background: var(--accent-dim);
-      border-color: rgba(255, 82, 119, 0.35);
-      color: var(--accent-light);
-      font-weight: 600;
-    }
+    .result-main { padding: 40px 32px; margin-bottom: 24px; text-align: center; }
+    .result-title { font-size: 32px; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+    .result-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; }
+    .skills-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .skill-chip { background: rgba(0,0,0,0.04); color: var(--text); font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: 999px; }
+    .skill-chip.primary { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(255, 51, 95, 0.3); }
 
-    .axes-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 28px;
-      margin-bottom: 16px;
-    }
-    .axes-title {
-      font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.7px;
-      color: var(--text-muted); margin-bottom: 20px;
-    }
-    .axis-row { margin-bottom: 14px; }
-    .axis-label-row {
-      display: flex; justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .axis-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-    .axis-pct { font-size: 13px; font-weight: 700; color: var(--accent-light); }
-    .axis-bar-bg {
-      height: 6px; background: rgba(255,255,255,0.06);
-      border-radius: 99px; overflow: hidden;
-    }
-    .axis-bar-fill {
-      height: 100%;
-      background: var(--gradient);
-      border-radius: 99px;
-      width: 0; transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
-    }
+    .axes-card { padding: 32px; margin-bottom: 32px; }
+    .axes-title { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 24px; }
+    .axis-row { margin-bottom: 18px; }
+    .axis-label-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .axis-label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .axis-pct { font-size: 14px; font-weight: 800; color: var(--text); }
+    .axis-bar-bg { height: 8px; background: rgba(0,0,0,0.05); border-radius: 99px; overflow: hidden; }
+    .axis-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; width: 0; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-    .result-actions { text-align: center; padding: 24px 0 0; }
-    .btn-restart {
-      background: transparent;
-      border: 1px solid var(--border-hover);
-      color: var(--accent-light);
-      font-family: inherit; font-size: 14px; font-weight: 600;
-      padding: 12px 28px; border-radius: 999px;
-      cursor: pointer; transition: all 0.15s;
-    }
-    .btn-restart:hover {
-      background: var(--accent-dim);
-      border-color: var(--accent);
-    }
+    .result-actions { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+    .btn-restart { background: transparent; color: var(--text-secondary); font-size: 15px; font-weight: 600; padding: 14px 32px; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-restart:hover { color: var(--text); }
   </style>
 </head>
 <body>
 
+<div class="bg-aurora">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
 <header class="header">
   <div class="logo">
-    <span class="logo-mono">Котячий Support</span>
+    <span class="logo-mono">Support</span>
     <span class="logo-sep">|</span>
     <span class="logo-ub">monobank</span>
   </div>
@@ -388,51 +221,41 @@
 
 <div id="screen-welcome" class="screen active">
   <div class="container">
-    <div class="welcome fade-in">
-      <div class="card-visual">
-        <div class="card-chip"></div>
-        <div class="card-bottom">
-          <div class="card-stars">
-            <div class="card-star"></div>
-            <div class="card-star"></div>
-            <div class="card-star"></div>
-          </div>
-          <div class="card-brand">М'ЯУ-SKILLS</div>
-        </div>
+    <div class="welcome">
+      <div class="hero-icon-wrap">
+        <span class="material-symbols-rounded" style="font-size: 64px;">pets</span>
       </div>
-      <h1>Який ти котик <em>у підтримці?</em></h1>
-      <p>10 життєвих ситуацій на лінії — і ти дізнаєшся, яка суперсила робить тебе топовим котаном 🐾</p>
-      <div class="meta-pills">
-        <span class="meta-pill">⏱️ 2 хвилини</span>
-        <span class="meta-pill">🎧 10 тікетів</span>
-        <span class="meta-pill">🏆 Твоя кото-роль</span>
-      </div>
-      <button class="btn-primary" onclick="startQuiz()">Розпочати тест →</button>
+      <h1>Який ти талант <em>у підтримці?</em></h1>
+      <p>10 реальних ситуацій з чатів — і ти дізнаєшся, яка суперсила робить тебе топовим кандидатом у команду.</p>
+      <br>
+      <button class="btn-primary accent" onclick="startQuiz()">Розпочати тест</button>
     </div>
   </div>
 </div>
 
 <div id="screen-quiz" class="screen">
   <div class="container">
-    <div class="progress-wrap">
-      <div class="progress-top">
-        <span id="q-counter">Питання 1 з 10</span>
-        <span id="q-pct">0%</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-top">
+      <span id="q-counter">Питання 1 з 10</span>
+      <span id="q-pct">0%</span>
     </div>
-    <div class="question-card">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    
+    <div class="glass-card question-card">
       <div class="question-num" id="q-num">01 / 10</div>
       <div class="question-text" id="q-text"></div>
     </div>
-    <div class="scale-section">
-      <div class="scale-buttons" id="scale-buttons"></div>
+    
+    <div class="glass-card interactive-scale">
       <div class="scale-labels">
         <span>Зовсім ні</span>
-        <span>Няв-трально</span>
         <span>О, так!</span>
       </div>
+      <div class="scale-track" id="scale-track">
+        <div class="scale-highlight" id="scale-highlight"></div>
+        </div>
     </div>
+    
     <div class="quiz-footer">
       <button class="btn-next" id="btn-next" disabled onclick="nextQuestion()">Далі →</button>
     </div>
@@ -440,252 +263,52 @@
 </div>
 
 <div id="screen-result" class="screen">
-  <div class="container"></div>
+  <div class="container" id="result-container"></div>
 </div>
 
+<canvas id="card-canvas" width="800" height="1000" style="display:none;"></canvas>
+
 <script>
+// --- ДАНІ ---
 const QUESTIONS = [
-  { text: "Якщо клієнт кричить і не пояснює суть проблеми, я гублюся, замість того щоб м'яко вивести розмову в конструктив.", axes: [-0.5, 0, 0, -1, 0], reversed: true },
-  { text: "Мені комфортніше працювати виключно за суворим скриптом, ніж муркотіти з клієнтом, імпровізуючи по ситуації.", axes: [-1, 0, -0.5, 0, 0], reversed: true },
-  { text: "Коли бачу, що інший котик неправильно оформив чат, я краще промовчу, щоб не настовбурчувати шерсть.", axes: [0, -1, 0, 0, -0.5], reversed: true },
-  { text: "Перша зміна на лінії або новий апдейт застосунку — це стрес, але я швидко відрощую вібріси і адаптуюсь.", axes: [0, 0, 1, 0, 0], reversed: false },
-  { text: "Якщо я не встигаю закрити складний запит, я чесно нявкну про це тімліду заздалегідь, навіть якщо це незручно.", axes: [0, 0.5, 0, 1, 0], reversed: false },
-  { text: "Можу взяти дзвінок від складного клієнта, навіть якщо не знаю всієї передісторії — розберуся по ходу.", axes: [1, 0, 0.5, 0, 0], reversed: false },
-  { text: "Мені важливо отримувати фідбек за свої діалоги одразу (порадою або погладжуванням), а не чекати оцінки якості в кінці місяця.", axes: [0, 0.5, 0, 0, 1], reversed: false },
-  { text: "Відверто сказати тімліду про проблеми зі скриптами важливіше, ніж зберігати ідеальну тишу в нашому лотку... ой, чаті.", axes: [0.5, 1, 0, 0, 0.5], reversed: false },
-  { text: "Нові правила, продукти та процеси — це норм, я легко зміню свої котячі звички.", axes: [0, 0, 1, 0.5, 0], reversed: false },
-  { text: "Я рідко прошу допомоги у старших котів — спочатку намагаюсь вигризти рішення самостійно.", axes: [0.5, -0.5, 0, 0.5, -0.5], reversed: false }
+  { text: "Уявімо перший тренувальний чат. Клієнт дуже емоційний і обурюється через дрібницю. Мені легше проявити емпатію і по-людськи його заспокоїти, ніж строго відповідати за скриптом.", axes: [0, 1, 0, -0.5, 0], reversed: false },
+  { text: "Якщо клієнт запитав те, чого ми ще не вчили, мій перший інстинкт — піти гуглити і шукати по базі знань, а не одразу кликати на допомогу старшого колегу.", axes: [1, 0, 0, 0, -0.5], reversed: false },
+  { text: "Нам кажуть, що завтра в додатку з'явиться нова фіча, і про неї питатимуть тисячі людей. Такий інтенсив мене скоріше драйвить, ніж змушує нервувати.", axes: [0, 0, 1, 0, 0], reversed: false },
+  { text: "Мені комфортніше взяти один складний запит і розібрати його для клієнта ідеально, ніж вести три легких діалоги одночасно в режимі турбо-швидкості.", axes: [0, 0, -1, 1, 0], reversed: false },
+  { text: "Якщо ментор під час перевірки мого діалогу знайде помилку, я сприйму це як круту підказку на майбутнє, а не буду доводити, що 'там клієнт сам був не правий'.", axes: [0, 0, 0, 0, 1], reversed: false },
+  { text: "Якщо я бачу, що готовий шаблон відповіді для клієнтів звучить якось 'душно' або незрозуміло, я запропоную команді його переписати, а не буду просто сліпо копіювати.", axes: [1, 0, 0.5, 0, 0.5], reversed: false },
+  { text: "Якщо людина в чаті починає жартувати, я з радістю підтримую гру і кидаю доречний мем, навіть якщо це на хвилину затягне час вирішення питання.", axes: [0, 1, 0.5, -0.5, 0], reversed: false },
+  { text: "Мені набагато спокійніше працювати, коли на кожне питання клієнта є чітка покрокова інструкція, ніж коли доводиться імпровізувати і приймати рішення самому.", axes: [-1, -0.5, -1, 1, 0], reversed: true },
+  { text: "Якщо хтось із новеньких стажерів питає в робочому чаті пораду, як відповісти клієнту, я обов'язково включусь і допоможу, навіть якщо це не мій обов'язок.", axes: [0, 1, 0, 0, 0.5], reversed: false },
+  { text: "Я сам буду періодично просити куратора почитати мої чати з клієнтами, щоб дізнатися, що я можу покращити, а не чекатиму на планову перевірку.", axes: [1, 0, 0, 0, 1], reversed: false }
 ];
 
+// ТУТ 9 ТВОЇХ КОТІВ З ПРАВИЛЬНИМИ НАЗВАМИ КАРТИНОК
 const PROFILES = [
-  {
-    name: "Тихий Ватажок Прайду",
-    icon: "🦁",
-    desc: "Ти ведеш інших котанів не голосним нявканням, а прикладом. Берешся за найскладніші тікети без зайвих слів. Твоя суперсила — внутрішня впевненість. Інші котики інстинктивно тобі довіряють.",
-    skills: ["Авторитет без крику", "Надійність", "Холодний розум"],
-    pattern: { i: 2, c: 1, a: 1, r: 2, f: 1 }
-  },
-  {
-    name: "Командний Котик",
-    icon: "🐾",
-    desc: "Тобі важливо, щоб прайд був єдиним механізмом. Ти легко знаходиш спільну мову з різними котанами і завжди готовий поділитися смаколиком (або підказкою в чаті). Конфлікти перетворюєш на дружнє муркотіння.",
-    skills: ["Командна гра", "Емпатія", "М'які лапки (Дипломатія)"],
-    pattern: { i: 1, c: 2, a: 1, r: 1, f: 1 }
-  },
-  {
-    name: "Кіт-Архітектор Систем",
-    icon: "⚙️",
-    desc: "Ти бачиш систему цілком. Перш ніж відповідати клієнту, ти аналізуєш процеси і знаходиш вузькі місця. Хаотичні діалоги ти перетворюєш на структуру. Твої рішення логічні, як ідеально вилизана шерсть.",
-    skills: ["Аналітичний розум", "Структурованість", "Оптимізація"],
-    pattern: { i: 1, c: 0, a: 1, r: 2, f: 1 }
-  },
-  {
-    name: "Гнучкий Акробат",
-    icon: "🐈",
-    desc: "Зміни для тебе — не стрес, а нова коробка для ігор. Ти швидко освоюєшся з новими продуктами банку і ніколи не падаєш спиною донизу. Перші дні після релізу фічі — твоя улюблена фаза.",
-    skills: ["Адаптивність", "Швидке навчання", "Дев'ять життів (Стресостійкість)"],
-    pattern: { i: 1, c: 1, a: 3, r: 1, f: 0 }
-  },
-  {
-    name: "Охоронець Дедлайнів",
-    icon: "🛡️",
-    desc: "Якщо ти взяв тікет — він буде закритий. Ти не шукаєш відмовок. Тімлід і прайд знають: на твої лапки можна покластись. Твоя надійність — це щира відповідальність за спокій клієнта.",
-    skills: ["Відповідальність", "Дисципліна", "Безвідмовність"],
-    pattern: { i: 0, c: 1, a: 1, r: 3, f: 1 }
-  },
-  {
-    name: "Голосистий Комунікатор",
-    icon: "💬",
-    desc: "Ти віриш, що більшість проблем вирішується, якщо просто добре поговорити. Не боїшся складних клієнтів і вмієш дати фідбек колезі так, щоб той не випустив кігті. Люди (і коти) люблять з тобою працювати.",
-    skills: ["Комунікабельність", "Асертивність", "Вміння слухати"],
-    pattern: { i: 0, c: 3, a: 1, r: 1, f: 1 }
-  },
-  {
-    name: "Допитливий Слідопит",
-    icon: "🔍",
-    desc: "Ти не чекаєш, поки старший кіт принесе готове рішення. Сам риєшся в базі знань, тестуєш застосунок і пропонуєш ідеї. Твоя цікавість — як у кота, що побачив лазерну указку. Це твоя конкурентна перевага.",
-    skills: ["Ініціативність", "Допитливість", "Самоорганізація"],
-    pattern: { i: 3, c: 1, a: 1, r: 1, f: 0 }
-  },
-  {
-    name: "Ловець Фідбеку",
-    icon: "🎯",
-    desc: "Ти знаєш, що не станеш левом без чесної критики. Просиш поради, даєш їх іншим і не боїшся визнати, якщо десь 'наклав мимо лотка'. Твій професійний розвиток швидкий і цілеспрямований.",
-    skills: ["Відкритість", "Саморефлексія", "Прагнення росту"],
-    pattern: { i: 0, c: 1, a: 0, r: 1, f: 3 }
-  },
-  {
-    name: "Кіт-Балансер",
-    icon: "⚖️",
-    desc: "Ти рідко впадаєш у крайнощі. Знаєш, коли треба побігати по стелі (проявити ініціативу), а коли — просто полежати на сонечку і підтримати розмову. Твоя рівновага — це мудре управління енергією.",
-    skills: ["Емоційний інтелект", "Гнучкість", "Самоконтроль"],
-    pattern: { i: 1, c: 1, a: 1, r: 1, f: 1 }
-  },
-  {
-    name: "Кіт-Одинак",
-    icon: "🐆",
-    desc: "Ти глибокий, самостійний мислитель. Тобі краще думається наодинці з базою даних, і твої відповіді клієнтам бездоганні. Командний чат для тебе — інструмент, а не місце для мемів. Ти цінуєш якість.",
-    skills: ["Стратегія", "Незалежність", "Глибина аналізу"],
-    pattern: { i: 2, c: 0, a: 1, r: 2, f: 0 }
-  },
-  {
-    name: "Муркотливий Емпат",
-    icon: "❤️",
-    desc: "Ти ідеально відчуваєш настрій клієнта і прайду. Підтримуєш колег після важких дзвінків і завжди знаходиш потрібне 'м'яу'. Твоя емпатія заспокоює найрозлюченіших клієнтів — це рідкісний дар.",
-    skills: ["Емпатія", "Підтримка", "Психологічна безпека"],
-    pattern: { i: 0, c: 2, a: 1, r: 0, f: 2 }
-  },
-  {
-    name: "Мисливець за Результатом",
-    icon: "📈",
-    desc: "Тебе цікавить спіймана миша (вирішена проблема), а не процес полювання. Швидко відсікаєш зайве і фокусуєшся на суті. Не любиш зайвих мітингів. Твій KPI завжди зелений, як котяча м'ята.",
-    skills: ["Орієнтація на результат", "Фокус", "Ефективність"],
-    pattern: { i: 2, c: 0, a: 0, r: 2, f: 0 }
-  },
-  {
-    name: "Кіт-Дипломат",
-    icon: "🕊️",
-    desc: "Ти вмієш заспокоїти двох котів, що шиплять один на одного. Конфлікти з клієнтами розв'язуєш граціозно, шукаєш win-win. Здатність знаходити компроміс — твоя головна фішка.",
-    skills: ["Переговори", "Робота з негативом", "Дипломатичність"],
-    pattern: { i: 0, c: 2, a: 2, r: 0, f: 1 }
-  },
-  {
-    name: "Експерт з Внутрішнім Моторчиком",
-    icon: "🚀",
-    desc: "Тобі не потрібен тімлід з лазеркою, щоб працювати круто. Ти сам ставиш собі планку, і вона вища за стандарти. Постійно читаєш нові інструкції та прагнеш бути найкращим на лінії.",
-    skills: ["Внутрішня мотивація", "Самодисципліна", "Експертність"],
-    pattern: { i: 2, c: 0, a: 0, r: 3, f: 0 }
-  },
-  {
-    name: "Гнучкий Стратег",
-    icon: "🌊",
-    desc: "Маєш план розмови, але легко змінюєш тактику, якщо клієнт видає щось непередбачуване. Не тримаєшся за стандартний скрипт, якщо бачиш кращий шлях до вирішення.",
-    skills: ["Стратегічне мислення", "Адаптивність", "Рішучість"],
-    pattern: { i: 2, c: 1, a: 2, r: 1, f: 0 }
-  },
-  {
-    name: "Кошеня, Що Зростає",
-    icon: "🌱",
-    desc: "Ти знаєш, що ще не став головним тигром — і це твоя сила. Відкрито питаєш про незрозуміле і швидко вчишся на помилках. Твій потенціал до розвитку просто величезний.",
-    skills: ["Жага до знань", "Смиренність", "Потенціал"],
-    pattern: { i: 1, c: 1, a: 2, r: 1, f: 2 }
-  },
-  {
-    name: "Душа Прайду",
-    icon: "🕸️",
-    desc: "Ти швидко обростаєш зв'язками. Вже в перший тиждень знаєш, до якого старшого кота йти з яким питанням. Твій нетворкінг — реальний інструмент для швидкого вирішення тікетів.",
-    skills: ["Нетворкінг", "Соціальний інтелект", "Комунікабельність"],
-    pattern: { i: 1, c: 3, a: 1, r: 0, f: 1 }
-  },
-  {
-    name: "Чесний Критик",
-    icon: "🔔",
-    desc: "Ти не боїшся нявкнути правду. Помічаєш баги в скриптах чи процесах і прямо кажеш про них — без агресії, але чітко. Ти захищаєш якість підтримки там, де інші мовчать.",
-    skills: ["Асертивність", "Прямолінійність", "Конструктив"],
-    pattern: { i: 1, c: 2, a: 0, r: 1, f: 2 }
-  },
-  {
-    name: "Процесний Творець",
-    icon: "🔧",
-    desc: "Ти віриш, що будь-який процес можна зробити зручнішим. Постійно шукаєш способи оптимізувати роботу з базою або чатами. Не ламаєш старе, а акуратно еволюціонуєш його.",
-    skills: ["Оптимізація", "Ініціативність", "Системність"],
-    pattern: { i: 2, c: 1, a: 1, r: 1, f: 1 }
-  },
-  {
-    name: "Кіт-Скеля",
-    icon: "🏔️",
-    desc: "Ти той, на кого спираються під час 'шторму' на лінії. Не панікуєш під тиском сотні дзвінків. Твій дзен заспокоює і клієнтів, і колег поруч. Ти — якір прайду.",
-    skills: ["Стресостійкість", "Надійність", "Спокій"],
-    pattern: { i: 0, c: 1, a: 2, r: 2, f: 1 }
-  },
-  {
-    name: "Еталонний Котан",
-    icon: "💎",
-    desc: "Твій рівень сервісу однаковий — чи слухає тебе контроль якості, чи ні. Твоя репутація кристально чиста. Це викликає максимальну довіру з боку керівництва.",
-    skills: ["Цілісність", "Відповідальність", "Довіра"],
-    pattern: { i: 0, c: 0, a: 0, r: 3, f: 1 }
-  },
-  {
-    name: "Творчий Бешкетник",
-    icon: "💡",
-    desc: "Ти бачиш нестандартні виходи зі складних ситуацій клієнтів. Генеруєш ідеї навіть тоді, коли не просять. Твоя енергія виводить якість підтримки за рамки звичайних скриптів.",
-    skills: ["Креативність", "Ініціатива", "Інноваційність"],
-    pattern: { i: 3, c: 1, a: 1, r: 0, f: 1 }
-  },
-  {
-    name: "Кіт-Перфекціоніст",
-    icon: "🔬",
-    desc: "Жодна дрібниця не прослизне повз твої очі. Кожна кома в чаті, кожна деталь тарифу перевірена двічі. Команда знає: після тебе тікет перепровіряти не треба.",
-    skills: ["Увага до деталей", "Якість", "Ретельність"],
-    pattern: { i: 0, c: 0, a: 0, r: 2, f: 2 }
-  },
-  {
-    name: "Котячий Фасилітатор",
-    icon: "🎤",
-    desc: "Ти вмієш модерувати хаос. На зборах чи в групових чатах ти розкладаєш все по поличках, даючи висловитись кожному. Після твого втручання з'являються чіткі інструкції.",
-    skills: ["Фасилітація", "Структурування", "Інклюзивність"],
-    pattern: { i: 1, c: 2, a: 1, r: 0, f: 2 }
-  },
-  {
-    name: "Кіт-Дослідник",
-    icon: "🧩",
-    desc: "Ти гуглиш і шукаєш в базі до останнього. Звертаєшся з питанням тільки коли перерив усе. Твої запитання глибокі і по суті. Ніколи не питаєш одне й те саме двічі.",
-    skills: ["Самостійність", "Аналітика", "Критичне мислення"],
-    pattern: { i: 2, c: 0, a: 1, r: 1, f: 1 }
-  },
-  {
-    name: "Генератор Мурчання",
-    icon: "🌟",
-    desc: "Твоя енергія заразлива. Коли настрій у прайді падає через важку зміну, ти — той, хто приносить позитив і нагадує, чому ви круті. З тобою просто приємно працювати поруч.",
-    skills: ["Натхнення", "Позитив", "Мотивація"],
-    pattern: { i: 1, c: 2, a: 1, r: 1, f: 0 }
-  },
-  {
-    name: "Тактичний Мишолов",
-    icon: "🎖️",
-    desc: "Ти чудово розумієш загальну мету компанії і розбиваєш її на щоденні дії. Плануєш свій час на лінії та перерви так, щоб максимізувати ефективність. Справжній ніндзя підтримки.",
-    skills: ["Планування", "Майстерність виконання", "Увага до деталей"],
-    pattern: { i: 1, c: 0, a: 1, r: 2, f: 1 }
-  },
-  {
-    name: "Відважний Новатор",
-    icon: "⚗️",
-    desc: "Ти не боїшся ламати застарілі правила. Пропонуєш сміливі зміни у спілкуванні з клієнтами і відстоюєш їх. Іноді це ризик, але саме ти рухаєш прайд у майбутнє.",
-    skills: ["Сміливість", "Інноваційність", "Стійкість"],
-    pattern: { i: 3, c: 0, a: 2, r: 0, f: 0 }
-  },
-  {
-    name: "Кіт-Ментор",
-    icon: "🦉",
-    desc: "Ти ловиш кайф, навчаючи новеньких кошенят. Терпляче пояснюєш, як працює адмінка, і щиро радієш їхнім успіхам. Твій досвід — це скарбниця всього відділу.",
-    skills: ["Наставництво", "Передача знань", "Підтримка"],
-    pattern: { i: 1, c: 2, a: 0, r: 1, f: 3 }
-  },
-  {
-    name: "Незалежний Тигр",
-    icon: "🐯",
-    desc: "Маєш власну думку і не боїшся сказати її керівництву. Тобі важливо зробити правильно, а не так, як простіше. Але якщо тебе переконати логікою — ти легко визнаєш правоту іншого.",
-    skills: ["Критичне мислення", "Незалежність", "Впевненість"],
-    pattern: { i: 2, c: 1, a: 0, r: 2, f: 0 }
-  }
+  { name: "Тихий Ватажок Прайду", image: "Тихий ватажок прайду.png", desc: "Впевнений кіт-бос, за яким йдуть інші. Берешся за найскладніші тікети і доводиш їх до кінця без зайвих слів.", skills: ["Авторитет", "Надійність"], pattern: { i: 2, c: 1, a: 1, r: 2, f: 1 } },
+  { name: "Кіт-Архітектор Систем", image: "Кіт-Архітектор Систем.png", desc: "Розумний кіт, що бачить процеси цілком. Перш ніж відповідати, аналізуєш і знаходиш ідеальне рішення.", skills: ["Аналітика", "Структурованість"], pattern: { i: 1, c: 0, a: 1, r: 3, f: 1 } },
+  { name: "Кіт-Одинак", image: "Кіт-Одинак.png", desc: "Зосереджений кіт-хакер. Працюєш наодинці, розв'язуєш найважчі технічні проблеми, не відволікаючись на розмови.", skills: ["Незалежність", "Експертність"], pattern: { i: 2, c: 0, a: 1, r: 2, f: 0 } },
+  { name: "Гнучкий Стратег", image: "Гнучкий Стратег.png", desc: "Хитрий котик. Маєш план розмови, але легко змінюєш тактику, як у грі в шахи, якщо клієнт видає щось непередбачуване.", skills: ["Стратегія", "Адаптивність"], pattern: { i: 2, c: 1, a: 2, r: 1, f: 1 } },
+  { name: "Муркотливий Емпат", image: "Муркотливий Емпат.png", desc: "Дуже милий, пухнастий кіт. Ідеально відчуваєш настрій клієнта. Твоя турбота заспокоює найрозлюченіших.", skills: ["Емпатія", "Турбота"], pattern: { i: 0, c: 3, a: 1, r: 0, f: 2 } },
+  { name: "Командний Котик", image: "Командний Котик.png", desc: "Кіт, що завжди дає 'п'ять' лапкою. Тобі важливо, щоб прайд був єдиним механізмом, легко знаходиш спільну мову.", skills: ["Командна гра", "Підтримка"], pattern: { i: 1, c: 2, a: 1, r: 1, f: 1 } },
+  { name: "Кіт-Дипломат", image: "Кіт-Дипломат.png", desc: "Інтелігентний кіт у краватці-метелику. Вмієш знайти компроміс і заспокоїти сторони, що конфліктують, граціозно розрулюючи проблеми.", skills: ["Переговори", "Спокій"], pattern: { i: 0, c: 2, a: 2, r: 1, f: 1 } },
+  { name: "Душа Прайду", image: "Душа Прайду.png", desc: "Стильний тусовочний кіт з кавою. Всіх знаєш і всім допомагаєш. Твоя енергія і соціальність об'єднують усю команду.", skills: ["Нетворкінг", "Соціальність"], pattern: { i: 2, c: 3, a: 1, r: 0, f: 1 } },
+  { name: "Гнучкий Акробат", image: "Гнучкий Акробат.png", desc: "Кіт у стрибку! Зміни для тебе — не стрес. Миттєво ловиш нові тікети та спритно адаптуєшся до будь-яких умов.", skills: ["Швидкість", "Адаптивність"], pattern: { i: 2, c: 1, a: 3, r: 0, f: 1 } }
 ];
 
-const AXIS_NAMES = ["Ініціативність", "Мур-комунікація", "Гнучкість (Адаптивність)", "Відповідальність", "Робота з фідбеком"];
+const AXIS_NAMES = ["Ініціативність", "Емпатія", "Адаптивність", "Процесність", "Робота з фідбеком"];
 
-let currentQ = 0;
-let answers = [];
-let selectedVal = null;
+let currentQ = 0; let answers = []; let selectedVal = null; let finalProfile = null;
 
+// --- ЛОГІКА ІНТЕРФЕЙСУ ---
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function startQuiz() {
-  currentQ = 0;
-  answers = [];
-  selectedVal = null;
+  currentQ = 0; answers = []; selectedVal = null;
   renderQuestion();
   showScreen('quiz');
 }
@@ -695,7 +318,7 @@ function renderQuestion() {
   const total = QUESTIONS.length;
   const pct = Math.round((currentQ / total) * 100);
 
-  document.getElementById('q-counter').textContent = `Запитання ${currentQ + 1} з ${total}`;
+  document.getElementById('q-counter').textContent = `Ситуація ${currentQ + 1} з ${total}`;
   document.getElementById('q-pct').textContent = pct + '%';
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('q-num').textContent = (currentQ + 1) + ' / ' + total;
@@ -704,22 +327,30 @@ function renderQuestion() {
   selectedVal = null;
   document.getElementById('btn-next').disabled = true;
 
-  const container = document.getElementById('scale-buttons');
-  container.innerHTML = '';
+  // Інтерактивний трек відповідей
+  const track = document.getElementById('scale-track');
+  track.innerHTML = '<div class="scale-highlight" id="scale-highlight"></div>';
+  
   for (let i = 0; i < 7; i++) {
     const btn = document.createElement('button');
-    btn.className = 'scale-btn';
-    btn.dataset.val = i;
-    btn.addEventListener('click', () => selectVal(i));
-    container.appendChild(btn);
+    btn.className = 'scale-option';
+    btn.onclick = (e) => selectVal(i, btn);
+    track.appendChild(btn);
   }
 }
 
-function selectVal(val) {
+function selectVal(val, btnElement) {
   selectedVal = val;
-  document.querySelectorAll('.scale-btn').forEach(btn => {
-    btn.classList.toggle('selected', +btn.dataset.val === val);
-  });
+  
+  // Анімація повзунка
+  const highlight = document.getElementById('scale-highlight');
+  highlight.style.width = btnElement.offsetWidth + 'px';
+  highlight.style.left = btnElement.offsetLeft + 'px';
+  highlight.style.opacity = '1';
+
+  document.querySelectorAll('.scale-option').forEach(b => b.classList.remove('active'));
+  btnElement.classList.add('active');
+  
   document.getElementById('btn-next').disabled = false;
 }
 
@@ -727,102 +358,231 @@ function nextQuestion() {
   if (selectedVal === null) return;
   answers.push(selectedVal);
   currentQ++;
-  if (currentQ < QUESTIONS.length) {
-    renderQuestion();
-  } else {
-    showResult();
-  }
+  if (currentQ < QUESTIONS.length) renderQuestion();
+  else calculateResult();
 }
 
-function showResult() {
+function calculateResult() {
   const axisScores = [0, 0, 0, 0, 0];
+  const axisMax = [0, 0, 0, 0, 0];
+  
   for (let q = 0; q < QUESTIONS.length; q++) {
     const question = QUESTIONS[q];
-    const raw = answers[q];
-    const effectiveVal = question.reversed ? (6 - raw) : raw;
+    const effectiveVal = question.reversed ? (6 - answers[q]) : answers[q];
     const norm = effectiveVal - 3;
     for (let a = 0; a < 5; a++) {
       axisScores[a] += norm * question.axes[a];
+      axisMax[a] += Math.abs(question.axes[a]) * 3;
     }
   }
 
-  // Обчислення максимуму для кожної осі
-  const axisMax = [0, 0, 0, 0, 0];
-  for (let a = 0; a < 5; a++) {
-    for (let q = 0; q < QUESTIONS.length; q++) {
-      axisMax[a] += Math.abs(QUESTIONS[q].axes[a]) * 3;
-    }
-  }
+  const normalized = axisScores.map((s, i) => axisMax[i] === 0 ? 50 : Math.round(((s + axisMax[i]) / (2 * axisMax[i])) * 100));
 
-  const normalized = axisScores.map((s, i) => {
-    if (axisMax[i] === 0) return 50;
-    return Math.round(((s + axisMax[i]) / (2 * axisMax[i])) * 100);
-  });
-
-  // Пошук профілю: мінімальна відстань
-  let bestProfile = PROFILES[0];
   let bestDist = Infinity;
-
   for (const p of PROFILES) {
-    const pi = p.pattern.i;
-    const pc = p.pattern.c;
-    const pa = p.pattern.a;
-    const pr = p.pattern.r;
-    const pf = p.pattern.f;
-
-    // Масштабування патерну (0-3) до 0-100
-    const pNorm = [pi, pc, pa, pr, pf].map(v => (v / 3) * 100);
+    const pNorm = [p.pattern.i, p.pattern.c, p.pattern.a, p.pattern.r, p.pattern.f].map(v => (v / 3) * 100);
     const dist = normalized.reduce((sum, v, i) => sum + Math.pow(v - pNorm[i], 2), 0);
-    if (dist < bestDist) {
-      bestDist = dist;
-      bestProfile = p;
-    }
+    if (dist < bestDist) { bestDist = dist; finalProfile = p; }
   }
 
-  const axesBarsHtml = normalized.map((pct, i) => `
+  renderResultUI(finalProfile, normalized);
+}
+
+function renderResultUI(profile, scores) {
+  const axesBarsHtml = scores.map((pct, i) => `
     <div class="axis-row">
       <div class="axis-label-row">
-        <span class="axis-label">${AXIS_NAMES[i]}</span>
-        <span class="axis-pct">${pct}%</span>
+        <span class="axis-label">${AXIS_NAMES[i]}</span><span class="axis-pct">${pct}%</span>
       </div>
-      <div class="axis-bar-bg">
-        <div class="axis-bar-fill" data-width="${pct}%"></div>
-      </div>
+      <div class="axis-bar-bg"><div class="axis-bar-fill" style="width: ${pct}%"></div></div>
     </div>
   `).join('');
 
-  const profile = bestProfile;
-  const html = `
-    <div class="result-hero fade-in">
-      <span class="result-emoji">${profile.icon}</span>
-      <span class="result-tag">Твоя кото-роль</span>
+  // Підставляємо картинку кота в UI
+  document.getElementById('result-container').innerHTML = `
+    <div class="result-hero">
+      <div class="hero-icon-wrap">
+        <img src="${profile.image}" alt="Твій кіт">
+      </div>
+      <span class="result-tag">Твій ідеальний профіль</span>
     </div>
-    <div class="result-main fade-in">
+    
+    <div class="glass-card result-main">
       <h2 class="result-title">${profile.name}</h2>
       <p class="result-desc">${profile.desc}</p>
       <div class="skills-row">
         ${profile.skills.map((s, i) => `<span class="skill-chip${i === 0 ? ' primary' : ''}">${s}</span>`).join('')}
       </div>
     </div>
-    <div class="axes-card fade-in">
-      <div class="axes-title">Твій профіль по осях</div>
+    
+    <div class="glass-card axes-card">
+      <div class="axes-title">Деталізація Soft Skills</div>
       ${axesBarsHtml}
     </div>
-    <div class="result-actions fade-in">
-      <button class="btn-restart" onclick="restartQuiz()">↺ Пройти ще раз</button>
-    </div>`;
-
-  document.getElementById('screen-result').querySelector('.container').innerHTML = html;
+    
+    <div class="result-actions">
+      <button class="btn-primary accent" onclick="downloadCard()">Завантажити картку 📥</button>
+      <button class="btn-restart" onclick="startQuiz()">Пройти ще раз</button>
+    </div>
+  `;
   showScreen('result');
-  setTimeout(() => {
-    document.querySelectorAll('.axis-bar-fill').forEach(el => {
-      el.style.width = el.dataset.width;
-    });
-  }, 100);
 }
 
-function restartQuiz() {
-  startQuiz();
+// --- CANVAS: ГЕНЕРАЦІЯ КАРТКИ З ЕФЕКТОМ СКЛА (AURORA) ---
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = ''; let resultY = y;
+  for (const word of words) {
+    const test = line + word + ' ';
+    if (ctx.measureText(test).width > maxWidth && line !== '') {
+      ctx.fillText(line.trim(), x, resultY);
+      line = word + ' '; resultY += lineHeight;
+    } else { line = test; }
+  }
+  ctx.fillText(line.trim(), x, resultY);
+  return resultY + lineHeight;
+}
+
+function drawRoundRect(ctx, x, y, width, height, radius, fillStyle, strokeStyle) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (fillStyle) { ctx.fillStyle = fillStyle; ctx.fill(); }
+  if (strokeStyle) { ctx.strokeStyle = strokeStyle; ctx.stroke(); }
+}
+
+async function downloadCard() {
+  const canvas = document.getElementById('card-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 800, H = 1000;
+  
+  await document.fonts.ready;
+
+  // 1. Фон (Колір бази)
+  ctx.fillStyle = '#FDF3F5';
+  ctx.fillRect(0, 0, W, H);
+
+  // 2. Малюємо кольорову ауру (Блоби)
+  ctx.filter = 'blur(100px)';
+  
+  ctx.fillStyle = '#FFD1E8'; // Рожевий
+  ctx.beginPath(); ctx.arc(150, 150, 350, 0, Math.PI*2); ctx.fill();
+  
+  ctx.fillStyle = '#B5D1E2'; // Блакитний
+  ctx.beginPath(); ctx.arc(700, 850, 400, 0, Math.PI*2); ctx.fill();
+  
+  ctx.fillStyle = '#E5E0FF'; // Бузковий
+  ctx.beginPath(); ctx.arc(750, 300, 250, 0, Math.PI*2); ctx.fill();
+  
+  ctx.filter = 'none';
+
+  // 3. Скляна картка поверх аури (Glassmorphism effect)
+  const cardX = 40, cardY = 40, cardW = 720, cardH = 920;
+  
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.08)';
+  ctx.shadowBlur = 40; ctx.shadowOffsetY = 16;
+  
+  ctx.lineWidth = 2;
+  drawRoundRect(ctx, cardX, cardY, cardW, cardH, 40, 'rgba(255, 255, 255, 0.55)', 'rgba(255, 255, 255, 0.9)');
+  
+  ctx.shadowColor = 'transparent'; // Скидаємо тінь
+  ctx.textBaseline = 'top'; 
+  
+  let currentY = 110;
+
+  // 4. Твоя картинка кота всередині "скляної кулі"
+  const iconX = W/2, iconY = currentY + 80;
+  
+  // Скляний кружок-підкладка
+  ctx.shadowColor = 'rgba(255, 51, 95, 0.15)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 16;
+  drawRoundRect(ctx, iconX - 80, currentY, 160, 160, 80, 'rgba(255, 255, 255, 0.7)', 'rgba(255, 255, 255, 0.9)');
+  ctx.shadowColor = 'transparent';
+
+  // Логіка завантаження твоєї картинки на Canvas
+  if (finalProfile.image) {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Запобігаємо помилці CORS, якщо сервер дозволяє
+    img.src = finalProfile.image;
+    
+    // Чекаємо, поки картинка повністю завантажиться
+    await new Promise((resolve) => {
+      img.onload = resolve;
+      img.onerror = () => {
+        console.warn("Не вдалося завантажити картинку для Canvas");
+        resolve(); // Все одно продовжуємо малювати
+      };
+    });
+    
+    // Малюємо картинку обрізаною по колу
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(iconX, iconY, 80, 0, Math.PI * 2);
+    ctx.clip(); // Обрізаємо все, що вилазить за межі кола
+    ctx.drawImage(img, iconX - 80, iconY - 80, 160, 160);
+    ctx.restore();
+  }
+
+  currentY += 210; 
+
+  // 5. Текстова частина
+  ctx.fillStyle = '#FF335F';
+  ctx.font = 'bold 18px Inter';
+  ctx.letterSpacing = '3px';
+  ctx.textAlign = 'center';
+  ctx.fillText('ТВІЙ ІДЕАЛЬНИЙ ПРОФІЛЬ', W/2, currentY);
+  currentY += 40; 
+
+  ctx.fillStyle = '#1C1C1E';
+  ctx.font = '900 64px Inter';
+  currentY = wrapText(ctx, finalProfile.name, W/2, currentY, 600, 70);
+  currentY += 24; 
+
+  ctx.fillStyle = '#3A3A3C'; 
+  ctx.font = '500 24px Inter';
+  currentY = wrapText(ctx, finalProfile.desc, W/2, currentY, 600, 36);
+  currentY += 50; 
+
+  // 6. Навички (Стильні плашки)
+  ctx.font = '700 20px Inter';
+  finalProfile.skills.forEach((skill, index) => {
+    const textWidth = ctx.measureText(skill).width;
+    const rectWidth = textWidth + 60;
+    const rectX = (W - rectWidth) / 2;
+    
+    const isPrimary = index === 0;
+    const bgColor = isPrimary ? '#FF335F' : 'rgba(0,0,0,0.04)';
+    const textColor = isPrimary ? '#FFFFFF' : '#1C1C1E';
+
+    drawRoundRect(ctx, rectX, currentY, rectWidth, 54, 27, bgColor, null);
+    
+    ctx.fillStyle = textColor;
+    ctx.fillText(skill, W/2, currentY + 15);
+    currentY += 72; 
+  });
+
+  // 7. Футер
+  ctx.fillStyle = '#8E8E93';
+  ctx.font = '600 20px Inter';
+  ctx.fillText("Support | monobank", W/2, 910);
+
+  // Завантаження із захистом від блокування браузером (Tainted Canvas)
+  try {
+    const link = document.createElement('a');
+    link.download = `monobank-cat-${finalProfile.name.replace(/\s+/g, '-')}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (error) {
+    alert("❌ Помилка скачування! Ваш браузер заблокував збереження картинки. Це буває, коли файл відкрито як локальний (file://). Будь ласка, запустіть файл через локальний сервер (наприклад, Live Server у VS Code).");
+    console.error("Помилка Canvas (ймовірно, Tainted Canvas):", error);
+  }
 }
 </script>
 </body>
